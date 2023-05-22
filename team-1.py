@@ -124,7 +124,7 @@ class Strega(Entita):
         self.difesa = (self.livello + 9) * 11
         self.punti_vita_correnti = self.punti_vita
 
-class Strega(Entita):
+class Samurai(Entita):
     def __init__(self, livello, nome, tipo):
         #inizializziamo il samurai con attacco medi, difesa medi e punti_vita medi
         #lo relazioniamo al livello partendo da 9 livelli in più per evitare disomogeneità esagerate
@@ -142,3 +142,5 @@ class Strega(Entita):
         self.punti_vita = (self.livello + 9) * 10
         self.difesa = (self.livello + 9) * 10
         self.punti_vita_correnti = self.punti_vita
+
+#programma
