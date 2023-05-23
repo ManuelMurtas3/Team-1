@@ -147,6 +147,7 @@ class Samurai(Entita):
 def genera_nemico(livello):
     numero_nemico = random.randint(1, 4)
     if numero_nemico == 1:
+        #drago
         return Drago(random.randint(livello - 1, livello + 1), "Drago")
     elif numero_nemico == 2:
         #elfo
@@ -160,7 +161,6 @@ def genera_nemico(livello):
 
 personaggio = Drago(10, "Me")
 nemico = genera_nemico(personaggio.livello)
-turno = 0
 turno_personaggio = True
 
 print("Hai incontrato un nemico!\n")
