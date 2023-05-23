@@ -58,14 +58,14 @@ class Entita:
 
     def stampa_statistiche(self):
         #resoconto delle statistiche correnti del personaggio
-        risultato = f"Nome: {self.nome} | Classe: {self.tipo}\n"
+        risultato = f"Classe: {self.tipo}\n"
         risultato += f"ATK {self.attacco} DEF {self.difesa}\n"
         risultato += f"HP: {self.punti_vita} | XP: {self.punti_esperienza_correnti} su {self.punti_esperienza}\n"
         return risultato
 
     def stampa_stato(self):
         #resoconto dei punti vita dell'entità durante il combattimento
-        return f"Ti rimangono HP {self.punti_vita_correnti} su {self.punti_vita}"
+        return f"{self.nome} | HP {self.punti_vita_correnti} su {self.punti_vita}"
 
 class Drago(Entita):
     def __init__(self, livello, nome, tipo):
