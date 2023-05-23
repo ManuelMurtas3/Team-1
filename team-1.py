@@ -294,16 +294,16 @@ def genera_nemico(livello):
     numero_nemico = random.randint(1, 4)
     if numero_nemico == 1:
         #drago
-        return Drago(random.randint(livello - 1, livello + 1), "Drago")
+        return Drago(random.randint(max(livello - 1, 1), livello + 1), "Drago")
     elif numero_nemico == 2:
         #elfo
-        return Elfo(random.randint(livello - 1, livello + 1), "Elfo")
+        return Elfo(random.randint(max(livello - 1, 1), livello + 1), "Elfo")
     elif numero_nemico == 3:
         #strega
-        return Strega(random.randint(livello - 1, livello + 1), "Strega")
+        return Strega(random.randint(max(livello - 1, 1), livello + 1), "Strega")
     else:
         #samurai
-        return Samurai(random.randint(livello - 1, livello + 1), "Samurai")
+        return Samurai(random.randint(max(livello - 1, 1), livello + 1), "Samurai")
 
 def combattimento(personaggio):
     #gestione combattimento
