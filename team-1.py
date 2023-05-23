@@ -315,7 +315,11 @@ def combattimento(personaggio):
     print("Hai incontrato un nemico!\n")
     print(nemico.stampa_statistiche() + "\n") #mostra le statistiche del nemico
 
+    turno = 0
+
     while not personaggio.sconfitto() and not nemico.sconfitto(): #finchè qualcuno non è stato sconfitto
+        turno += 1
+        print(f"Turno {turno}\n")
         if turno_personaggio: #turno del personaggio
             #calcolo di attacco personaggio, difesa nemico e della loro differenza
             attacco = personaggio.attacca()
