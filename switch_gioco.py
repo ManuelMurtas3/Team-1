@@ -1,13 +1,12 @@
 
-
+#crea un personaggio
 personaggio = Drago(1, 'nome_scelto')
-
 def switch_gioco():
     flag = True 
     while flag: 
-        print (" COSA VUOI FARE? \n")
-        print (" Premi [1] per COMBATTERE\n Premi [2] per VISUALIZZARE LE STATISTICHE DEL TUO PERSONAGGIO\n Premi [0] per TORNARE INDIETRO\n")
-        scelta = int(input(""))
+        print (" \n BENVENUTO SFIDANTE \n")
+        print (" Premi [1] per COMBATTERE\n Premi [2] per VISUALIZZARE LE STATISTICHE DEL TUO PERSONAGGIO\n Premi [0] per TORNARE INDIETRO")
+        scelta = int(input(" "))
         
         if scelta == 1 :
             print ("Combatti")
@@ -26,8 +25,8 @@ def switch_gioco():
             break
         
         else:
-            print("ATTENZIONE ")
+            print("ATTENZIONE, SCELTA ERRATA")
       
 
 switch_gioco()
-    
+
