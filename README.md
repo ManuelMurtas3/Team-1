@@ -28,7 +28,7 @@ Indentazione di default (4 spazi o 1 un tab).
 # Roadmap
 Versione 1.0: permettere ai giocatori di creare personaggi, combattere contro nemici, guadagnare punti esperienza e livellare.
 
-Versione 2.0: implementare abilità, oggetti e missioni per rendere il gioco più coinvolgente.
+Versione 2.0: implementare abilità, oggetti e missioni per rendere il gioco più coinvolgente + messaggio xp (nota di simone).
 
 Future release: implementazione di boss dopo un numero definito di combattimenti con premio speciale, studio di statistiche per il bilanciamento
 delle classi dei personaggi, aggiunta di nuove missioni meglio legate alle nuove feature del gioco, scelta di diversi tipi di attacco (es. normale o speciale)
