@@ -175,6 +175,9 @@ def switch():
                 #rimanere nel gioco
                 print("Sei rimasto nel gioco, buon divertimento!\n")
 
+            else:
+                print("L'opzione da te inserita non è corretta, riprova.\n")
+
         elif scelta == "1":
             #entra nel gioco
             print("Sei entrato nel gioco, buon divertimento!\n")
@@ -193,6 +196,7 @@ def switch():
 def crea_personaggio():
     #creazione personaggio
     #inserimento nome personaggio
+    print("Benvenuto, crea il tuo personaggio.")
     nome_scelto = input('Insersci il nome del tuo personaggio: ')
     print()
 
@@ -281,6 +285,8 @@ def switch_gioco(personaggio):
             elif scelta == "2": 
                 #rimanere nel gioco
                 print("Sei rimasto nel gioco, buon divertimento!\n") 
+            else:
+                print("L'opzione da te inserita non è corretta, riprova.\n")
         else:
             print("L'opzione da te inserita non è corretta, riprova.\n")
 
@@ -300,14 +306,18 @@ def genera_nemico(livello):
         return Samurai(random.randint(livello - 1, livello + 1), "Samurai")
 
 def combattimento(personaggio):
+    #gestione combattimento
+    #generazione nemico
     nemico = genera_nemico(personaggio.livello)
-    turno_personaggio = True
+
+    turno_personaggio = True #booleana che indica di chi è il turno (true personaggio, false nemico)
 
     print("Hai incontrato un nemico!\n")
-    print(nemico.stampa_statistiche() + "\n")
+    print(nemico.stampa_statistiche() + "\n") #mostra le statistiche del nemico
 
-    while not personaggio.sconfitto() and not nemico.sconfitto():
-        if turno_personaggio:
+    while not personaggio.sconfitto() and not nemico.sconfitto(): #finchè qualcuno non è stato sconfitto
+        if turno_personaggio: #turno del personaggio
+            #calcolo di attacco personaggio, difesa nemico e della loro differenza
             attacco = personaggio.attacca()
             difesa = nemico.difende()
             print(f"{personaggio.nome}: ATK -> {attacco}")
@@ -315,12 +325,17 @@ def combattimento(personaggio):
             combattimento = attacco - difesa 
 
             if combattimento > 0:
+                #attacco efficace, sottraggo la vita al nemico
                 print(f"{personaggio.nome}: datto inflitto -> {combattimento}")
                 nemico.prendi_danno(combattimento)
             else:
+                #attacco non efficace
                 print(f"{personaggio.nome}: l'attacco era troppo debole")
-            turno_personaggio = False
-        else:
+
+            turno_personaggio = False #cambio turno
+
+        else: #turno nemico
+            #calcolo di attacco nemico, difesa personaggio e della loro differenza
             attacco = nemico.attacca()
             difesa = personaggio.difende()
             print(f"Nemico: ATK -> {attacco}")
@@ -328,21 +343,30 @@ def combattimento(personaggio):
             combattimento = attacco - difesa 
 
             if combattimento > 0:
+                #attacco efficace, sottraggo vita al personaggio
                 print(f"Nemico: datto inflitto -> {combattimento}")
                 personaggio.prendi_danno(combattimento)
             else:
+                #attacco non efficace
                 print("Nemico: l'attacco era troppo debole")
-            turno_personaggio = True
+
+            turno_personaggio = True #cambio turno
+
+        #recap stato corrente di personaggio e nemico
         print(personaggio.stampa_stato())
         print(nemico.stampa_stato())
         print()
 
+    #termine battaglia
     if personaggio.sconfitto():
+        #personaggio sconfitto
         print("Mi dispiace, sei stato sconfitto\n")
     else:
+        #personaggio vittorioso
         print("Congratulazioni, hai sconfitto il nemico\n")
-        personaggio.guadagna_xp(nemico.livello)
+        personaggio.guadagna_xp(nemico.livello) #aggiunta xp della battaglia
         print()
-    personaggio.rigenera_salute()
+
+    personaggio.rigenera_salute() #il personaggio rigenera salute alla fine di ogni combattimento
 
 switch()
