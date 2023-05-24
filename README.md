@@ -11,7 +11,7 @@ Nel caso si presentino problemi dopo l'assegnazione di sotto-obiettivi da svolge
 # Commit
 Ogni problema verrà suddiviso in sotto-obiettivi.
 
-Ad ogni commit corrisponde un sotto-obiettivo col nome del sotto-obiettivo.
+Ad ogni commit corrisponde un sotto-obiettivo.
 
 # Commenti
 I commenti verrano riportati all'inizio di ogni blocco logico.
@@ -51,6 +51,7 @@ attributi:
 - livello
 - attacco
 - difesa
+- abilità-attivata
 
 metodi:
 - attacca
@@ -62,3 +63,11 @@ metodi:
 - rigenera_salute
 - stampa_statistiche (menù statistiche)
 - stampa_stato (durante combattimento)
+- rigenera_abilità
+- attiva_abilità
+
+Sono state previste quattro classi di personaggi:
+- Drago (ATK 110 DEF 90 HP 100) con l'abilità di potenziare la sua difesa in proporzione agli HP persi per un massimo del 20%
+- Elfo (ATK 90 DEF 100 HP 110) con l'abilità di potenziare il suo attacco in proporzione agli HP persi per un massimo del 20%
+- Strega (ATK 100 DEF 110 HP 90) con l'abilità di ridurre di un livello l'avversario
+- Samurai (ATK 100 DEF 100 HP 100) con l'abilità di ridurre del 5% la difesa dell'avversario
