@@ -6,13 +6,13 @@ class Entita:
         self.livello = livello
         self.nome = nome
         self.tipo = tipo
-        self.attacco = 1
-        self.difesa = 1
-        self.punti_vita = 1
-        self.punti_esperienza = 50
-        self.punti_vita_correnti = 1
-        self.punti_esperienza_correnti = 0
-        self.abilita_attivata = False
+        self.attacco = 1 #statistica attacco
+        self.difesa = 1 #statistica difesa
+        self.punti_vita = 1 #punti vita massimi
+        self.punti_esperienza = 50 #punti esperienza massimi
+        self.punti_vita_correnti = 1 #punti vita correnti
+        self.punti_esperienza_correnti = 0 #punti esperienza correnti
+        self.abilita_attivata = False #indica se l'abilità dell'entità è già stata utilizzata nel combattimento corrente
 
     def attacca(self):
         #ritorna un numero casuale tra 0 e il valore massimo di attacco durante il combattimento
@@ -93,6 +93,7 @@ class Drago(Entita):
         self.difesa = (self.livello + 9) * 9
     
     def attiva_abilita(self, nemico):
+        #aumenta la sua difesa di un massimo del 20% in relazione ai punti vita rimasti
         if not self.abilita_attivata:
             percentuale_punti_vita = self.punti_vita_correnti * 100 // self.punti_vita
             percentuale_boost_difesa = 20 - int(0.2 * percentuale_punti_vita)
@@ -122,6 +123,7 @@ class Elfo(Entita):
         self.difesa = (self.livello + 9) * 10
     
     def attiva_abilita(self, nemico):
+        #aumenta il suo attacco di un massimo del 20% in relazione ai punti vita rimasti
         if not self.abilita_attivata:
             percentuale_punti_vita = self.punti_vita_correnti * 100 // self.punti_vita
             percentuale_boost_attacco = 20 - int(0.2 * percentuale_punti_vita)
@@ -151,6 +153,7 @@ class Strega(Entita):
         self.difesa = (self.livello + 9) * 11
     
     def attiva_abilita(self, nemico):
+        #diminuisce di un livello l'avversario
         if not self.abilita_attivata:
             if nemico.livello > 1:
                 nemico.livello -= 2
@@ -179,6 +182,7 @@ class Samurai(Entita):
         self.difesa = (self.livello + 9) * 10
     
     def attiva_abilita(self, nemico):
+        #abbassa la difesa dell'avversario del 5%
         if not self.abilita_attivata:
             nemico.difesa -= int(nemico.difesa * 0.05)
             return super().attiva_abilita(nemico) + f" - La difesa di {nemico.nome} è stata ridotta del 5%.\n"
@@ -347,13 +351,13 @@ def genera_nemico(livello):
         return Samurai(random.randint(max(livello - 1, 1), livello + 1), "Samurai")
 
 def prova_abilita(personaggio, nemico, turno):
+    #funzione per l'attivazione dell'abilità del personaggio o del nemico in base al turno
     abilita = random.randint(1,2)
     if abilita == 1:
         if turno == True:
             print(personaggio.attiva_abilita(nemico))
         else:
             print(nemico.attiva_abilita(personaggio))
-
 
 def combattimento(personaggio):
     #gestione combattimento
@@ -371,9 +375,11 @@ def combattimento(personaggio):
         turno += 1
         print(f"Turno {turno}\n")
         if turno_personaggio: #turno del personaggio
-            #calcolo di attacco personaggio, difesa nemico e della loro differenza
+            
+            #richiamiamo (col 50% di probabilità) l'esecuzione dell'abilità del personaggio o del nemico
             prova_abilita(personaggio, nemico, turno_personaggio)
 
+            #calcolo di attacco personaggio, difesa nemico e della loro differenza
             attacco = personaggio.attacca()
             difesa = nemico.difende()
             print(f"{personaggio.nome}: ATK -> {attacco}")
@@ -426,6 +432,6 @@ def combattimento(personaggio):
         print()
 
     personaggio.rigenera_salute() #il personaggio rigenera salute alla fine di ogni combattimento
-    personaggio.rigenera_abilita()
+    personaggio.rigenera_abilita() #rigeneriamo la possibilità di utilizzare l'abilità al prossimo combattimento
 
-switch()
+switch() #ingresso nel programma
