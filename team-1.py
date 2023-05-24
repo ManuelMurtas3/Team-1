@@ -6,13 +6,13 @@ class Entita:
         self.livello = livello
         self.nome = nome
         self.tipo = tipo
-        self.livello = 1
         self.attacco = 1
         self.difesa = 1
         self.punti_vita = 1
         self.punti_esperienza = 50
         self.punti_vita_correnti = 1
         self.punti_esperienza_correnti = 0
+        self.abilita_attivata = False
 
     def attacca(self):
         #ritorna un numero casuale tra 0 e il valore massimo di attacco durante il combattimento
@@ -66,6 +66,13 @@ class Entita:
     def stampa_stato(self):
         #resoconto dei punti vita dell'entità durante il combattimento
         return f"{self.nome} | HP {self.punti_vita_correnti} su {self.punti_vita}"
+    
+    def attiva_abilita(self, nemico):
+        self.abilita_attivata = True
+        return "Abilità attivata"
+    
+    def rigenera_abilita(self):
+        self.abilita_attivata = False
 
 class Drago(Entita):
     def __init__(self, livello, nome):
@@ -84,7 +91,17 @@ class Drago(Entita):
         self.attacco = (self.livello + 9) * 11
         self.punti_vita = (self.livello + 9) * 10
         self.difesa = (self.livello + 9) * 9
-        self.punti_vita_correnti = self.punti_vita
+    
+    def attiva_abilita(self, nemico):
+        if not self.abilita_attivata:
+            percentuale_punti_vita = self.punti_vita_correnti * 100 // self.punti_vita
+            percentuale_boost_difesa = 20 - int(0.2 * percentuale_punti_vita)
+            self.difesa += self.difesa * percentuale_boost_difesa // 100
+            if percentuale_boost_difesa == 0:
+                return "Abilità non attivabile ora. Hai ancora tutti i punti vita.\n"
+            else:
+                return super().attiva_abilita(nemico) + f" - La difesa di {self.nome} è aumentata del {percentuale_boost_difesa}%.\n"
+        return "Abilità non attivabile. È già stata attivata.\n"
 
 class Elfo(Entita):
     def __init__(self, livello, nome):
@@ -103,7 +120,17 @@ class Elfo(Entita):
         self.attacco = (self.livello + 9) * 9
         self.punti_vita = (self.livello + 9) * 11
         self.difesa = (self.livello + 9) * 10
-        self.punti_vita_correnti = self.punti_vita
+    
+    def attiva_abilita(self, nemico):
+        if not self.abilita_attivata:
+            percentuale_punti_vita = self.punti_vita_correnti * 100 // self.punti_vita
+            percentuale_boost_attacco = 20 - int(0.2 * percentuale_punti_vita)
+            self.attacco += self.attacco * percentuale_boost_attacco // 100
+            if percentuale_boost_attacco == 0:
+                return "Abilità non attivabile ora. Hai ancora tutti i punti vita.\n"
+            else:
+                return super().attiva_abilita(nemico) + f" - L'attacco di {self.nome} è aumentato del {percentuale_boost_attacco}%.\n"
+        return "Abilità non attivabile. È già stata attivata.\n"
 
 class Strega(Entita):
     def __init__(self, livello, nome):
@@ -122,7 +149,16 @@ class Strega(Entita):
         self.attacco = (self.livello + 9) * 10
         self.punti_vita = (self.livello + 9) * 9
         self.difesa = (self.livello + 9) * 11
-        self.punti_vita_correnti = self.punti_vita
+    
+    def attiva_abilita(self, nemico):
+        if not self.abilita_attivata:
+            if nemico.livello > 1:
+                nemico.livello -= 2
+                nemico.aumenta_livello()
+                return super().attiva_abilita(nemico) + f" - Il livello di {nemico.nome} è stato ridotto di uno.\n"
+            else:
+                return f"Abilità non attivata, il livello di {nemico.nome} è troppo basso.\n"
+        return "Abilità non attivabile. È già stata attivata.\n"
 
 class Samurai(Entita):
     def __init__(self, livello, nome):
@@ -141,7 +177,12 @@ class Samurai(Entita):
         self.attacco = (self.livello + 9) * 10
         self.punti_vita = (self.livello + 9) * 10
         self.difesa = (self.livello + 9) * 10
-        self.punti_vita_correnti = self.punti_vita
+    
+    def attiva_abilita(self, nemico):
+        if not self.abilita_attivata:
+            nemico.difesa -= int(nemico.difesa * 0.05)
+            return super().attiva_abilita(nemico) + f" - La difesa di {nemico.nome} è stata ridotta del 5%.\n"
+        return "Abilità non attivabile. È già stata attivata.\n"
 
 #programma
 
@@ -305,6 +346,15 @@ def genera_nemico(livello):
         #samurai
         return Samurai(random.randint(max(livello - 1, 1), livello + 1), "Samurai")
 
+def prova_abilita(personaggio, nemico, turno):
+    abilita = random.randint(1,2)
+    if abilita == 1:
+        if turno == True:
+            print(personaggio.attiva_abilita(nemico))
+        else:
+            print(nemico.attiva_abilita(personaggio))
+
+
 def combattimento(personaggio):
     #gestione combattimento
     #generazione nemico
@@ -322,6 +372,8 @@ def combattimento(personaggio):
         print(f"Turno {turno}\n")
         if turno_personaggio: #turno del personaggio
             #calcolo di attacco personaggio, difesa nemico e della loro differenza
+            prova_abilita(personaggio, nemico, turno_personaggio)
+
             attacco = personaggio.attacca()
             difesa = nemico.difende()
             print(f"{personaggio.nome}: ATK -> {attacco}")
@@ -340,6 +392,8 @@ def combattimento(personaggio):
 
         else: #turno nemico
             #calcolo di attacco nemico, difesa personaggio e della loro differenza
+            prova_abilita(personaggio, nemico, turno_personaggio)
+
             attacco = nemico.attacca()
             difesa = personaggio.difende()
             print(f"Nemico: ATK -> {attacco}")
@@ -352,8 +406,8 @@ def combattimento(personaggio):
                 personaggio.prendi_danno(combattimento)
             else:
                 #attacco non efficace
-                print("Nemico: l'attacco era troppo debole")
-
+                print("Nemico: l'attacco era troppo debole\n")
+            
             turno_personaggio = True #cambio turno
 
         #recap stato corrente di personaggio e nemico
@@ -372,5 +426,6 @@ def combattimento(personaggio):
         print()
 
     personaggio.rigenera_salute() #il personaggio rigenera salute alla fine di ogni combattimento
+    personaggio.rigenera_abilita()
 
 switch()
