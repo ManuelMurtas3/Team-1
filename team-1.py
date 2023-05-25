@@ -1,5 +1,6 @@
 # Classe Entità: base per tutti i personaggi. Vedere documentazione (README.md)
 import random
+from typing import Any
 
 class Entita:
     def __init__(self, livello, nome, tipo):
@@ -187,6 +188,31 @@ class Samurai(Entita):
             nemico.difesa -= int(nemico.difesa * 0.05)
             return super().attiva_abilita(nemico) + f" - La difesa di {nemico.nome} è stata ridotta del 5%.\n"
         return "Abilità non attivabile. È già stata attivata.\n"
+
+
+class Strumento:
+    def __init__(self, nome, descrizione):
+        self.nome = nome
+        self.descrizione = descrizione
+    
+    def attiva_strumento(self, personaggio, nemico):
+        return f"Strumento {self.nome} attivato"
+
+class PozioneCura(Strumento):
+    def __init__(self):
+        super().__init__("Pozione cura", "Permette di recuperare 10 punti vita.")
+    
+    def attiva_strumento(self, personaggio, nemico):
+        personaggio.punti_vita_correnti = min(personaggio.punti_vita_correnti + 10, personaggio.punti_vita)
+        return super().attiva_strumento(personaggio, nemico)
+
+class PozioneDanno(Strumento):
+    def __init__(self):
+        super().__init__("Pozione danno", "Permette di infliggere un danno di 10 punti vita.")
+    
+    def attiva_strumento(self, personaggio, nemico):
+        nemico.prendi_danno(10)
+        return super().attiva_strumento(personaggio, nemico)
 
 #programma
 
