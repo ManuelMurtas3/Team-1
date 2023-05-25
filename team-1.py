@@ -1,7 +1,6 @@
-# Classe Entità: base per tutti i personaggi. Vedere documentazione (README.md)
 import random
-from typing import Any
 
+# Classe Entità: base per tutti i personaggi. Vedere documentazione (README.md)
 class Entita:
     def __init__(self, livello, nome, tipo):
         self.livello = livello
@@ -70,20 +69,23 @@ class Entita:
         return f"{self.nome} | HP {self.punti_vita_correnti} su {self.punti_vita}"
     
     def attiva_abilita(self, nemico):
+        #attivazione abilita
         self.abilita_attivata = True
         return "Abilità attivata"
     
     def rigenera_abilita(self):
+        #rigenerazione abilita dopo l'eventuale utilizzo
         self.abilita_attivata = False
     
     def aggiungi_strumento(self, strumento):
+        #aggiunta strumento alla lista strumenti
         self.lista_strumenti.append(strumento)
 
     def utilizza_strumento(self, indice_strumento, nemico):
+        #utilizzo ed eliminazione di uno strumento
         strumento = self.lista_strumenti[indice_strumento]
         print(strumento.attiva_strumento(self, nemico))
         self.lista_strumenti.pop(indice_strumento)
-
 
 class Drago(Entita):
     def __init__(self, livello, nome):
@@ -199,16 +201,18 @@ class Samurai(Entita):
             return super().attiva_abilita(nemico) + f" - La difesa di {nemico.nome} è stata ridotta del 5%.\n"
         return "Abilità non attivabile. È già stata attivata.\n"
 
-
+#Classe strumento: base per tutti i strumenti
 class Strumento:
     def __init__(self, nome, descrizione):
-        self.nome = nome
-        self.descrizione = descrizione
+        self.nome = nome #nome dello strumento
+        self.descrizione = descrizione #breve descrizione dello strumento
     
     def attiva_strumento(self, personaggio, nemico):
+        #attivazione dello strumento
         return f"Strumento {self.nome} attivato"
     
     def to_string(self):
+        #resoconto dello strumento
         return f"Strumento {self.nome}: {self.descrizione}"
 
 class PozioneCura(Strumento):
@@ -216,6 +220,7 @@ class PozioneCura(Strumento):
         super().__init__("Pozione cura", "Permette di recuperare 10 punti vita.")
     
     def attiva_strumento(self, personaggio, nemico):
+        #incrementa la vita del personaggio di 10 punti vita
         personaggio.punti_vita_correnti = min(personaggio.punti_vita_correnti + 10, personaggio.punti_vita)
         return super().attiva_strumento(personaggio, nemico)
 
@@ -224,6 +229,7 @@ class PozioneDanno(Strumento):
         super().__init__("Pozione danno", "Permette di infliggere un danno di 10 punti vita.")
     
     def attiva_strumento(self, personaggio, nemico):
+        #decrementa la vita dell'avversario di 10 punti vita
         nemico.prendi_danno(10)
         return super().attiva_strumento(personaggio, nemico)
 
@@ -345,19 +351,19 @@ def switch_gioco(personaggio):
             print ("Combatti\n")
             #combattimento
 
+            #generazione nemico
             nemico = genera_nemico(personaggio.livello)
 
+            #gestione del combattimento
             switch_combattimento(personaggio, nemico)
-            
-            #combattimento(personaggio)
-            
+                   
         elif scelta == "2":
             #stampa delle statistiche correnti del personaggio
             print ("STATISTICHE PERSONAGGIO: \n")
             print(personaggio.stampa_statistiche())
         
         elif scelta == "0":
-
+            #uscita dal gioco
             print("Sei sicuro di voler uscire dal gioco?")
             print("1. Conferma l'uscita dal gioco")
             print("2. Ritorna nel gioco")
@@ -375,8 +381,10 @@ def switch_gioco(personaggio):
                 #rimanere nel gioco
                 print("Sei rimasto nel gioco, buon divertimento!\n") 
             else:
+                #opzione inesistente
                 print("L'opzione da te inserita non è corretta, riprova.\n")
         else:
+            #opzione inesistente
             print("L'opzione da te inserita non è corretta, riprova.\n")
 
 def genera_nemico(livello):
@@ -395,28 +403,20 @@ def genera_nemico(livello):
         return Samurai(random.randint(max(livello - 1, 1), livello + 1), "Samurai")
 
 def genera_strumento():
+    #generazione di uno strumento (50% di probabilità)
     numero_strumento = random.randint(1, 4)
     if numero_strumento == 1:
-        #pozione cura
+        #pozione cura (25%)
         return PozioneCura()
     elif numero_strumento == 2:
-        #pozione danno
+        #pozione danno (25%)
         return PozioneDanno()
     else:
+        #nessuno strumento (50%)
         return None
 
-def prova_abilita(personaggio, nemico, turno):
-    #funzione per l'attivazione dell'abilità del personaggio o del nemico in base al turno
-    abilita = random.randint(1,2)
-    if abilita == 1:
-        if turno == True:
-            print(personaggio.attiva_abilita(nemico))
-        else:
-            print(nemico.attiva_abilita(personaggio))
-
 def switch_combattimento(personaggio, nemico):
-    turno_personaggio = True #booleana che indica di chi è il turno (true personaggio, false nemico)
-
+    #menu di combattimento
     print("Hai incontrato un nemico!\n")
     print(nemico.stampa_statistiche() + "\n") #mostra le statistiche del nemico
 
@@ -448,10 +448,12 @@ def switch_combattimento(personaggio, nemico):
                 print("Sei tornato al menù combattimento\n")
            
             elif scelta == "1":
+                #esecuzione di un doppio turno di combattimentos
                 combattimento(personaggio, nemico, turno)
                 turno += 1
                 
             else:
+                #opzione inesistente
                 print("L'opzione da te inserita non è corretta, riprova.\n")
 
         elif scelta == "2":
@@ -469,9 +471,11 @@ def switch_combattimento(personaggio, nemico):
                 print(personaggio.attiva_abilita(nemico))
 
             elif scelta == "2":
+               #torna al menu combattimento
                print("Sei tornato al menù combattimento\n")
 
             else:
+                #opzione inesistente
                 print("L'opzione da te inserita non è corretta, riprova.\n")
 
 
@@ -506,10 +510,12 @@ def switch_combattimento(personaggio, nemico):
                print("Sei tornato al menù combattimento\n")
 
             else:
+                #opzione inesistente
                 print("L'opzione da te inserita non è corretta, riprova.\n")
 
        
         elif scelta == "4":
+            #menu fuga
             print("Hai scelto di fuggire")
             print("1. Conferma fuga")
             print("2. Torna al menu")
@@ -518,13 +524,16 @@ def switch_combattimento(personaggio, nemico):
             print()
 
             if scelta == "1":
+                #fuga confermata
                 print("Hai scelto di fuggire, fuggi!\n")
                 break
            
             elif scelta == "2":
+               #fuga annullata
                print("Sei tornato al menù combattimento\n")
 
             else:
+                #opzione inesistente
                 print("L'opzione da te inserita non è corretta, riprova.\n")
 
         else:
@@ -538,8 +547,9 @@ def switch_combattimento(personaggio, nemico):
         #personaggio vittorioso
         print("Congratulazioni, hai sconfitto il nemico\n")
         personaggio.guadagna_xp(nemico.livello) #aggiunta xp della battaglia
-        strumento = genera_strumento()
+        strumento = genera_strumento() #viene generato un eventuale strumento come drop del nemico
         if strumento != None:
+            #aggiunta dello strumento alla nostra lista di strumenti
             personaggio.aggiungi_strumento(strumento)
             print("Hai guadagnato uno strumento!")
             print(strumento.to_string())
